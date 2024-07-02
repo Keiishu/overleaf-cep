@@ -899,6 +899,7 @@ module.exports = {
     'launchpad',
     'server-ce-scripts',
     'user-activate',
+    'track-changes',
   ],
 
   csp: {
