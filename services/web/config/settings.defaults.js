@@ -901,6 +901,7 @@ module.exports = {
     'user-activate',
     'track-changes',
   ],
+  viewIncludes: {},
 
   csp: {
     enabled: process.env.CSP_ENABLED === 'true',
