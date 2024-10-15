@@ -150,7 +150,7 @@ templates.registered = ctaTemplate({
   },
   secondaryMessage() {
     return [
-      `If you have any questions or problems, please contact ${settings.adminEmail}`,
+      `Upon your first login, please set up your first and last name in the Account Settings. If you have any questions or problems, please contact ${settings.adminEmail}`,
     ]
   },
   ctaText() {
