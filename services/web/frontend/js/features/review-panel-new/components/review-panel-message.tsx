@@ -5,14 +5,14 @@ import {
 } from '../../../../../types/review-panel/review-panel'
 import { useTranslation } from 'react-i18next'
 import { formatTimeBasedOnYear } from '@/features/utils/format-date'
-import Tooltip from '@/shared/components/tooltip'
-import { Button } from 'react-bootstrap'
+import OLTooltip from '@/features/ui/components/ol/ol-tooltip'
 import MaterialIcon from '@/shared/components/material-icon'
 import AutoExpandingTextArea from '@/shared/components/auto-expanding-text-area'
 import { buildName } from '../utils/build-name'
 import ReviewPanelCommentOptions from './review-panel-comment-options'
 import { ExpandableContent } from './review-panel-expandable-content'
 import ReviewPanelDeleteCommentModal from './review-panel-delete-comment-modal'
+import { useUserContext } from '@/shared/context/user-context'
 
 export const ReviewPanelMessage: FC<{
   message: ReviewPanelCommentThreadMessage
@@ -20,7 +20,7 @@ export const ReviewPanelMessage: FC<{
   isReply: boolean
   onResolve?: () => Promise<void>
   onEdit?: (commentId: CommentId, content: string) => Promise<void>
-  onDelete?: (CommentId: CommentId) => Promise<void>
+  onDelete?: () => void
   isThreadResolved: boolean
 }> = ({
   message,
@@ -35,6 +35,7 @@ export const ReviewPanelMessage: FC<{
   const [editing, setEditing] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [content, setContent] = useState(message.content)
+  const user = useUserContext()
 
   const handleEditOption = useCallback(() => setEditing(true), [])
   const showDeleteModal = useCallback(() => setDeleting(true), [])
@@ -46,9 +47,9 @@ export const ReviewPanelMessage: FC<{
   }, [content, message.id, onEdit])
 
   const handleDelete = useCallback(() => {
-    onDelete?.(message.id)
+    onDelete?.()
     setDeleting(false)
-  }, [message.id, onDelete])
+  }, [onDelete])
 
   if (editing) {
     return (
@@ -90,26 +91,28 @@ export const ReviewPanelMessage: FC<{
 
         <div className="review-panel-entry-actions">
           {!isReply && !isThreadResolved && (
-            <Tooltip
+            <OLTooltip
               id="resolve-thread"
               overlayProps={{ placement: 'bottom' }}
               description={t('resolve_comment')}
               tooltipProps={{ className: 'review-panel-tooltip' }}
             >
-              <Button onClick={onResolve} bsStyle={null}>
+              <button type="button" className="btn" onClick={onResolve}>
                 <MaterialIcon
                   type="check"
                   className="review-panel-entry-actions-icon"
                   accessibilityLabel={t('resolve_comment')}
                 />
-              </Button>
-            </Tooltip>
+              </button>
+            </OLTooltip>
           )}
 
           {!isThreadResolved && (
             <ReviewPanelCommentOptions
+              belongsToCurrentUser={user.id === message.user.id}
               onEdit={handleEditOption}
               onDelete={showDeleteModal}
+              id={message.id}
             />
           )}
         </div>

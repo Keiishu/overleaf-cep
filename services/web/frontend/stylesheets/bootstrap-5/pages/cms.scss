@@ -78,10 +78,61 @@
     font-size: 14px;
   }
 
+  section {
+    padding: var(--spacing-16) 0 0 0;
+
+    &.no-top-padding {
+      /* opt out of padding via the CMS */
+      padding-top: 0;
+    }
+
+    // TODO: confirm if we will still support this and if so what colors to use
+    // &.color-block {
+    //   &.green-dark {
+    //     background-color: @ol-dark-green;
+    //   }
+    //   &.green {
+    //     background-color: @ol-green;
+
+    //     .no-card * {
+    //       .btn-primary,
+    //       .btn-success {
+    //         // only correct button colors when green on green
+    //         .btn-primary-on-primary-bg;
+    //       }
+    //     }
+    //   }
+    //   &.blue-gray-dark {
+    //     background-color: @ol-blue-gray-5;
+    //   }
+    //   &.blue-gray-light {
+    //     background-color: @ol-blue-gray-1;
+    //   }
+
+    //   &.green,
+    //   &.green-dark,
+    //   &.blue-gray-dark {
+    //     .no-card * {
+    //       &:not(.btn) {
+    //         color: @white;
+    //       }
+    //       a {
+    //         text-decoration: underline;
+    //       }
+    //       .btn {
+    //         text-decoration: none;
+    //       }
+
+    //       .form-control {
+    //         color: @input-color;
+    //       }
+    //     }
+    //   }
+    // }
+  }
+
   .section-row {
     @extend .container;
-
-    margin: 0 auto;
   }
 
   padding-bottom: 0;
@@ -313,6 +364,9 @@
   video {
     height: auto;
     max-width: 100%;
+    box-shadow:
+      0 8px 16px 0 rgba(30 37 48 / 12%),
+      0 4px 6px 0 rgba(30 37 48 / 12%);
   }
 
   /*
@@ -471,14 +525,6 @@
   }
 }
 
-.card-pattern.cta-card {
-  .font-size-display-xs {
-    @include media-breakpoint-down(lg) {
-      font-size: var(--font-size-08);
-    }
-  }
-}
-
 .contact-form-error-container {
   padding-bottom: var(--spacing-08);
 }
@@ -594,6 +640,40 @@
 
     .reverse-col-order-mobile {
       flex-direction: column-reverse;
+    }
+
+    .section-row {
+      &.section-row-mobile-gap-spacing-16 {
+        @include section-row-custom-gap(calc(var(--spacing-16) / 2));
+      }
+
+      &.section-row-mobile-gap-spacing-15 {
+        @include section-row-custom-gap(calc(var(--spacing-15) / 2));
+      }
+
+      &.section-row-mobile-gap-spacing-14 {
+        @include section-row-custom-gap(calc(var(--spacing-14) / 2));
+      }
+
+      &.section-row-mobile-gap-spacing-13 {
+        @include section-row-custom-gap(calc(var(--spacing-13) / 2));
+      }
+
+      &.section-row-mobile-gap-spacing-12 {
+        @include section-row-custom-gap(calc(var(--spacing-12) / 2));
+      }
+
+      &.section-row-mobile-gap-spacing-11 {
+        @include section-row-custom-gap(calc(var(--spacing-11) / 2));
+      }
+
+      &.section-row-mobile-gap-spacing-10 {
+        @include section-row-custom-gap(calc(var(--spacing-10) / 2));
+      }
+
+      &.section-row-mobile-gap-spacing-09 {
+        @include section-row-custom-gap(calc(var(--spacing-09) / 2));
+      }
     }
   }
 }
