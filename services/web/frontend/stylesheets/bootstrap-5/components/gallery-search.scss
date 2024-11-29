@@ -1,4 +1,6 @@
 .gallery-search {
+  margin-bottom: var(--spacing-16);
+
   form {
     display: flex;
     justify-content: center;
@@ -44,13 +46,36 @@
           justify-content: center;
           height: 100%;
           width: 100%;
+          position: relative;
+
+          &::before {
+            content: '';
+            background: var(--neutral-90);
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--border-radius-base);
+            transition: opacity 0.15s ease-in-out;
+          }
 
           img {
+            @include shadow-md;
+
             width: 185px;
-            box-shadow: 0 2px 4px 0 rgba(30 37 48 / 16%);
+            border-radius: var(--border-radius-base);
 
             @include media-breakpoint-down(sm) {
               width: 35vw;
+            }
+          }
+
+          &:hover {
+            &::before {
+              opacity: 0.08;
+              transition: opacity 0.15s ease-in-out;
             }
           }
         }
@@ -76,6 +101,17 @@
           &:hover {
             text-decoration: underline;
           }
+
+          @include media-breakpoint-down(lg) {
+            @include heading-sm;
+          }
+
+          @include media-breakpoint-down(md) {
+            @include heading-xs;
+
+            line-clamp: 3;
+            -webkit-line-clamp: 3;
+          }
         }
       }
 
@@ -86,7 +122,7 @@
       .search-author {
         display: block;
 
-        & + .search-hit-tags {
+        & + .badge-link-list {
           margin-top: var(--spacing-06);
         }
       }
@@ -94,27 +130,6 @@
       .gallery-official {
         margin-left: var(--spacing-06);
         vertical-align: text-top;
-      }
-
-      .search-hit-tags {
-        list-style: none;
-        margin: 0;
-        padding-left: 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--spacing-04);
-
-        li a {
-          @include body-sm;
-
-          color: var(--color-primary-dark);
-          text-decoration: none;
-
-          &:hover {
-            text-decoration: underline;
-            color: var(--green-50);
-          }
-        }
       }
     }
   }

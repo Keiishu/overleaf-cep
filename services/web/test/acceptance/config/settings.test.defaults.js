@@ -55,10 +55,6 @@ module.exports = {
     documentupdater: {
       url: 'http://127.0.0.1:23003',
     },
-    spelling: {
-      url: 'http://127.0.0.1:23005',
-      host: '127.0.0.1',
-    },
     docstore: {
       url: 'http://127.0.0.1:23016',
       pubUrl: 'http://127.0.0.1:23016',
@@ -87,6 +83,11 @@ module.exports = {
     },
     v1_history: {
       url: `http://127.0.0.1:23100/api`,
+      user: 'overleaf',
+      pass: 'password',
+    },
+    historyBackupDeletion: {
+      url: `http://127.0.0.1:23101`,
       user: 'overleaf',
       pass: 'password',
     },

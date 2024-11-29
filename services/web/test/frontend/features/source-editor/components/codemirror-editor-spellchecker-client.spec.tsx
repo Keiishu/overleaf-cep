@@ -114,14 +114,6 @@ forEach(Object.keys(suggestions)).describe(
     beforeEach(function () {
       cy.window().then(win => {
         win.metaAttributesCache.set('ol-preventCompileOnLoad', true)
-        win.metaAttributesCache.set('ol-splitTestVariants', {
-          'spell-check-client': 'enabled',
-          'spell-check-no-server': 'enabled',
-        })
-        win.metaAttributesCache.set('ol-splitTestInfo', {
-          'spell-check-client': { phase: 'release' },
-          'spell-check-no-server': { phase: 'release' },
-        })
         win.metaAttributesCache.set('ol-learnedWords', ['baz'])
         win.metaAttributesCache.set(
           'ol-dictionariesRoot',
@@ -152,7 +144,9 @@ forEach(Object.keys(suggestions)).describe(
       const [from, to] = suggestions[spellCheckLanguage]
 
       cy.get('@line').type(`${from} ${to}`)
-      cy.get('@line').get('.ol-cm-spelling-error').should('have.length', 1)
+      cy.get('@line')
+        .get('.ol-cm-spelling-error', { timeout: 10000 })
+        .should('have.length', 1)
       cy.get('@line').get('.ol-cm-spelling-error').should('have.text', from)
 
       cy.get('@line').get('.ol-cm-spelling-error').rightclick()

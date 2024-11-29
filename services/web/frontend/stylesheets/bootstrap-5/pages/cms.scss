@@ -66,8 +66,53 @@
     }
   }
 
-  .btn + .btn {
-    margin-left: var(--spacing-06);
+  // create .paragraphs-margin-spacing-00, .paragraphs-margin-spacing-01, .paragraphs-margin-spacing-02, .paragraphs-margin-spacing-03, .paragraphs-margin-spacing-04, .paragraphs-margin-spacing-05, .paragraphs-margin-spacing-06, .paragraphs-margin-spacing-07, .paragraphs-margin-spacing-08, .paragraphs-margin-spacing-09, .paragraphs-margin-spacing-10, .paragraphs-margin-spacing-11, .paragraphs-margin-spacing-12, .paragraphs-margin-spacing-13, .paragraphs-margin-spacing-14, .paragraphs-margin-spacing-15, .paragraphs-margin-spacing-16
+  @each $spacing-option in $all-spacings {
+    .paragraphs-margin-#{$spacing-option} {
+      p {
+        margin-bottom: var(--#{$spacing-option});
+      }
+    }
+  }
+
+  // create .headers-top-margin-spacing-00, .headers-top-margin-spacing-01, .headers-top-margin-spacing-02, .headers-top-margin-spacing-03, .headers-top-margin-spacing-04, .headers-top-margin-spacing-05, .headers-top-margin-spacing-06, .headers-top-margin-spacing-07, .headers-top-margin-spacing-08, .headers-top-margin-spacing-09, .headers-top-margin-spacing-10, .headers-top-margin-spacing-11, .headers-top-margin-spacing-12, .headers-top-margin-spacing-13, .headers-top-margin-spacing-14, .headers-top-margin-spacing-15, .headers-top-margin-spacing-16
+  @each $spacing-option in $all-spacings {
+    .headers-top-margin-#{$spacing-option} {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin-top: var(--#{$spacing-option});
+      }
+    }
+  }
+
+  // create .headers-bottom-margin-spacing-00, .headers-bottom-margin-spacing-01, .headers-bottom-margin-spacing-02, .headers-bottom-margin-spacing-03, .headers-bottom-margin-spacing-04, .headers-bottom-margin-spacing-05, .headers-bottom-margin-spacing-06, .headers-bottom-margin-spacing-07, .headers-bottom-margin-spacing-08, .headers-bottom-margin-spacing-09, .headers-bottom-margin-spacing-10, .headers-bottom-margin-spacing-11, .headers-bottom-margin-spacing-12, .headers-bottom-margin-spacing-13, .headers-bottom-margin-spacing-14, .headers-bottom-margin-spacing-15, .headers-bottom-margin-spacing-16
+  @each $spacing-option in $all-spacings {
+    .headers-bottom-margin-#{$spacing-option} {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin-bottom: var(--#{$spacing-option});
+      }
+    }
+  }
+
+  .font-color-green-bright {
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: var(--green-bright);
+    }
   }
 
   .card + .card {
@@ -131,7 +176,8 @@
     // }
   }
 
-  .section-row {
+  // only first level of .section-row need to act like containers. We do not want to update .section-row nested within a .section-row
+  section > .section-row {
     @extend .container;
   }
 
@@ -409,6 +455,33 @@
     &.top-margin-xxl {
       margin-top: var(--spacing-11);
     }
+
+    // create .top-margin-spacing-00, .top-margin-spacing-01, .top-margin-spacing-02, .top-margin-spacing-03, .top-margin-spacing-04, .top-margin-spacing-05, .top-margin-spacing-06, .top-margin-spacing-07, .top-margin-spacing-08, .top-margin-spacing-09, .top-margin-spacing-10, .top-margin-spacing-11, .top-margin-spacing-12, .top-margin-spacing-13, .top-margin-spacing-14, .top-margin-spacing-15, .top-margin-spacing-16
+    @each $spacing-option in $all-spacings {
+      &.top-margin-#{$spacing-option} {
+        margin-top: var(--#{$spacing-option});
+      }
+    }
+  }
+
+  .card {
+    @each $spacing-option in $all-spacings {
+      // create .padding-spacing-00, .padding-spacing-01, .padding-spacing-02, .padding-spacing-03, .padding-spacing-04, .padding-spacing-05, .padding-spacing-06, .padding-spacing-07, .padding-spacing-08, .padding-spacing-09, .padding-spacing-10, .padding-spacing-11, .padding-spacing-12, .padding-spacing-13, .padding-spacing-14, .padding-spacing-15, .padding-spacing-16
+      &.padding-#{$spacing-option} {
+        .card-body {
+          padding: var(--#{$spacing-option});
+        }
+      }
+    }
+  }
+
+  .no-card {
+    @each $spacing-option in $all-spacings {
+      // create .padding-spacing-00, .padding-spacing-01, .padding-spacing-02, .padding-spacing-03, .padding-spacing-04, .padding-spacing-05, .padding-spacing-06, .padding-spacing-07, .padding-spacing-08, .padding-spacing-09, .padding-spacing-10, .padding-spacing-11, .padding-spacing-12, .padding-spacing-13, .padding-spacing-14, .padding-spacing-15, .padding-spacing-16
+      &.padding-#{$spacing-option} {
+        padding: var(--#{$spacing-option});
+      }
+    }
   }
 }
 
@@ -452,10 +525,8 @@
   bottom: 1px;
 }
 
-.vertically-center-col {
-  div[class*='col-'] {
-    align-self: center;
-  }
+.vertically-center-col > div[class*='col-'] {
+  align-self: center;
 
   // remove margin to better vertically align
   // some elements need to be nested within a container, and others are directly within .no-card/.card
@@ -488,12 +559,16 @@
 
 .row-within-card {
   .no-card {
-    > :first-child {
-      margin-top: 0;
+    div:first-child {
+      > :first-child {
+        margin-top: 0;
+      }
     }
 
-    > :last-child {
-      margin-bottom: 0;
+    div:last-child {
+      > :last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }
@@ -509,7 +584,7 @@
       margin-bottom: unset;
     }
 
-    .tags-list {
+    .badge-link-list {
       padding: 0 var(--spacing-05);
       margin-bottom: 0 !important;
     }
@@ -571,62 +646,41 @@
 
 // Desktop layout options depdendent on mobile breakpoint
 @include media-breakpoint-up(lg) {
-  .row-equal-column-heights {
-    div[class*='col-'] {
-      .card,
-      .no-card {
-        height: 100%;
-      }
+  .row-equal-column-heights > div[class*='col-'] > .card,
+  .row-equal-column-heights > div[class*='col-'] > .no-card {
+    height: 100%;
+  }
+
+  .row {
+    &.row-max-800 {
+      max-width: 800px !important;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &.row-max-900 {
+      max-width: 900px !important;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &.row-max-1000 {
+      max-width: 1000px !important;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &.row-max-unset {
+      max-width: unset !important;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 
-  .section-row {
-    &.section-row-max-800 {
-      max-width: 800px !important;
-    }
-
-    &.section-row-max-900 {
-      max-width: 900px !important;
-    }
-
-    &.section-row-max-1000 {
-      max-width: 1000px !important;
-    }
-
-    &.section-row-max-unset {
-      max-width: unset !important;
-    }
-
-    &.section-row-gap-spacing-16 {
-      @include section-row-custom-gap(calc(var(--spacing-16) / 2));
-    }
-
-    &.section-row-gap-spacing-15 {
-      @include section-row-custom-gap(calc(var(--spacing-15) / 2));
-    }
-
-    &.section-row-gap-spacing-14 {
-      @include section-row-custom-gap(calc(var(--spacing-14) / 2));
-    }
-
-    &.section-row-gap-spacing-13 {
-      @include section-row-custom-gap(calc(var(--spacing-13) / 2));
-    }
-
-    &.section-row-gap-spacing-12 {
-      @include section-row-custom-gap(calc(var(--spacing-12) / 2));
-    }
-
-    &.section-row-gap-spacing-11 {
-      @include section-row-custom-gap(calc(var(--spacing-11) / 2));
-    }
-
-    &.section-row-gap-spacing-10 {
-      @include section-row-custom-gap(calc(var(--spacing-10) / 2));
-    }
-
-    &.section-row-gap-spacing-09 {
-      @include section-row-custom-gap(calc(var(--spacing-09) / 2));
+  // create .row-gap-spacing-00, .row-gap-spacing-01, .row-gap-spacing-02, .row-gap-spacing-03, .row-gap-spacing-04, .row-gap-spacing-05, .row-gap-spacing-06, .row-gap-spacing-07, .row-gap-spacing-08, .row-gap-spacing-09, .row-gap-spacing-10, .row-gap-spacing-11, .row-gap-spacing-12, .row-gap-spacing-13, .row-gap-spacing-14, .row-gap-spacing-15, .row-gap-spacing-16
+  @each $spacing-option in $all-spacings {
+    .row-gap-#{$spacing-option} {
+      @include section-row-custom-gap(calc(var(--#{$spacing-option}) / 2));
     }
   }
 }
@@ -642,37 +696,10 @@
       flex-direction: column-reverse;
     }
 
-    .section-row {
-      &.section-row-mobile-gap-spacing-16 {
-        @include section-row-custom-gap(calc(var(--spacing-16) / 2));
-      }
-
-      &.section-row-mobile-gap-spacing-15 {
-        @include section-row-custom-gap(calc(var(--spacing-15) / 2));
-      }
-
-      &.section-row-mobile-gap-spacing-14 {
-        @include section-row-custom-gap(calc(var(--spacing-14) / 2));
-      }
-
-      &.section-row-mobile-gap-spacing-13 {
-        @include section-row-custom-gap(calc(var(--spacing-13) / 2));
-      }
-
-      &.section-row-mobile-gap-spacing-12 {
-        @include section-row-custom-gap(calc(var(--spacing-12) / 2));
-      }
-
-      &.section-row-mobile-gap-spacing-11 {
-        @include section-row-custom-gap(calc(var(--spacing-11) / 2));
-      }
-
-      &.section-row-mobile-gap-spacing-10 {
-        @include section-row-custom-gap(calc(var(--spacing-10) / 2));
-      }
-
-      &.section-row-mobile-gap-spacing-09 {
-        @include section-row-custom-gap(calc(var(--spacing-09) / 2));
+    // create .row-mobile-gap-spacing-00, .row-mobile-gap-spacing-01, .row-mobile-gap-spacing-02, .row-mobile-gap-spacing-03, .row-mobile-gap-spacing-04, .row-mobile-gap-spacing-05, .row-mobile-gap-spacing-06, .row-mobile-gap-spacing-07, .row-mobile-gap-spacing-08, .row-mobile-gap-spacing-09, .row-mobile-gap-spacing-10, .row-mobile-gap-spacing-11, .row-mobile-gap-spacing-12, .row-mobile-gap-spacing-13, .row-mobile-gap-spacing-14, .row-mobile-gap-spacing-15, .row-mobile-gap-spacing-16
+    @each $spacing-option in $all-spacings {
+      .row-mobile-gap-#{$spacing-option} {
+        @include section-row-custom-gap(calc(var(--#{$spacing-option}) / 2));
       }
     }
   }

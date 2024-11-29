@@ -98,24 +98,41 @@ $max-width: 160px;
   font-weight: var(--badge-font-weight);
 }
 
-.tags {
-  .tags-list {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    gap: var(--spacing-05);
-    flex-wrap: wrap;
+.badge-link {
+  display: inline-block;
+
+  &.badge-link-light:hover .badge {
+    background-color: var(--neutral-30) !important;
   }
 
-  .badge-tag {
+  &.badge-link-no-max-width {
+    .badge {
+      max-width: none;
+    }
+  }
+
+  .badge {
+    @include body-sm;
+
     padding: 0 var(--bs-badge-padding-x);
-  }
+    transition: background-color 0.15s ease-in-out;
 
-  li {
-    display: inline-flex;
+    &:hover {
+      transition: background-color 0.15s ease-in-out;
+    }
   }
+}
 
-  a {
-    font-size: small;
+.badge-link-list {
+  display: flex;
+  gap: var(--spacing-05);
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-content: flex-start;
+
+  .badge {
+    max-width: 200px;
   }
 }

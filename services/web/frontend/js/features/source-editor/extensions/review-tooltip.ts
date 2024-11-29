@@ -14,11 +14,15 @@ import {
 } from '@codemirror/state'
 import { isSplitTestEnabled } from '@/utils/splitTestUtils'
 import { v4 as uuid } from 'uuid'
-import { textSelected, textSelectedEffect } from './text-selected'
+import { isCursorNearViewportTop } from '../utils/is-cursor-near-edge'
 
 export const addNewCommentRangeEffect = StateEffect.define<Range<Decoration>>()
 
 export const removeNewCommentRangeEffect = StateEffect.define<Decoration>()
+
+export const textSelectedEffect = StateEffect.define<EditorView>()
+
+export const removeReviewPanelTooltipEffect = StateEffect.define()
 
 export const buildAddNewCommentRangeEffect = (range: SelectionRange) => {
   return addNewCommentRangeEffect.of(
@@ -36,7 +40,31 @@ export const reviewTooltip = (): Extension => {
     return []
   }
 
-  return [reviewTooltipTheme, reviewTooltipStateField, textSelected]
+  return [
+    reviewTooltipTheme,
+    reviewTooltipStateField,
+    EditorView.updateListener.of(update => {
+      if (update.selectionSet && !update.state.selection.main.empty) {
+        update.view.dispatch({
+          effects: textSelectedEffect.of(update.view),
+        })
+      } else if (
+        !update.startState.selection.main.empty &&
+        update.state.selection.main.empty
+      ) {
+        update.view.dispatch({
+          effects: removeReviewPanelTooltipEffect.of(null),
+        })
+      }
+    }),
+    EditorView.domEventHandlers({
+      mousedown(event, view) {
+        view.dispatch({
+          effects: removeReviewPanelTooltipEffect.of(null),
+        })
+      },
+    }),
+  ]
 }
 
 export const reviewTooltipStateField = StateField.define<{
@@ -53,6 +81,10 @@ export const reviewTooltipStateField = StateField.define<{
     addCommentRanges = addCommentRanges.map(tr.changes)
 
     for (const effect of tr.effects) {
+      if (effect.is(removeReviewPanelTooltipEffect)) {
+        return { tooltip: null, addCommentRanges }
+      }
+
       if (effect.is(removeNewCommentRangeEffect)) {
         const rangeToRemove = effect.value
         addCommentRanges = addCommentRanges.update({
@@ -88,14 +120,15 @@ export const reviewTooltipStateField = StateField.define<{
   ],
 })
 
-function buildTooltip(range: SelectionRange): Tooltip | null {
-  if (range.empty) {
+function buildTooltip(view: EditorView): Tooltip | null {
+  if (view.state.selection.main.empty) {
     return null
   }
 
+  const pos = view.state.selection.main.head
   return {
-    pos: range.assoc < 0 ? range.to : range.from,
-    above: true,
+    pos,
+    above: !isCursorNearViewportTop(view, pos, 50),
     strictSide: true,
     arrow: false,
     create() {
@@ -113,6 +146,7 @@ const reviewTooltipTheme = EditorView.baseTheme({
   '.review-tooltip-menu-container.cm-tooltip': {
     backgroundColor: 'transparent',
     border: 'none',
+    zIndex: 0,
   },
 
   '&light': {
