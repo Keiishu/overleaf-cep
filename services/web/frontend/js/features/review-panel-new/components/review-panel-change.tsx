@@ -15,15 +15,7 @@ import { useChangesUsersContext } from '../context/changes-users-context'
 import { ReviewPanelChangeUser } from './review-panel-change-user'
 import { ReviewPanelEntry } from './review-panel-entry'
 import { useModalsContext } from '@/features/ide-react/context/modals-context'
-
-const TEXT_CHAR_LIMIT = 50
-
-const truncateText = (text: string) => {
-  if (text.length > TEXT_CHAR_LIMIT) {
-    return text.slice(0, TEXT_CHAR_LIMIT) + '...'
-  }
-  return text
-}
+import { ExpandableContent } from './review-panel-expandable-content'
 
 export const ReviewPanelChange = memo<{
   change: Change<EditOperation>
@@ -92,15 +84,10 @@ export const ReviewPanelChange = memo<{
         docId={docId}
         hoverRanges={hoverRanges}
         disabled={accepting}
+        onEnterEntryIndicator={onEnter}
+        onLeaveEntryIndicator={onLeave}
+        entryIndicator="edit"
       >
-        <div
-          className="review-panel-entry-indicator"
-          onMouseEnter={onEnter}
-          onMouseLeave={onLeave}
-        >
-          <MaterialIcon type="edit" className="review-panel-entry-icon" />
-        </div>
-
         <div
           className="review-panel-entry-content"
           onMouseEnter={onEnter}
@@ -177,18 +164,27 @@ export const ReviewPanelChange = memo<{
                   <span>
                     {t('aggregate_changed')}:{' '}
                     <del className="review-panel-content-highlight">
-                      {truncateText(aggregate.op.d)}
+                      <ExpandableContent
+                        inline
+                        content={aggregate.op.d}
+                        checkNewLines={false}
+                      />
                     </del>{' '}
                     {t('aggregate_to')}{' '}
-                    <ins className="review-panel-content-highlight">
-                      {truncateText(change.op.i)}
-                    </ins>
+                    <ExpandableContent
+                      inline
+                      content={change.op.i}
+                      checkNewLines={false}
+                    />
                   </span>
                 ) : (
                   <span>
                     {t('tracked_change_added')}:&nbsp;
                     <ins className="review-panel-content-highlight">
-                      {truncateText(change.op.i)}
+                      <ExpandableContent
+                        content={change.op.i}
+                        checkNewLines={false}
+                      />
                     </ins>
                   </span>
                 )}
@@ -205,7 +201,10 @@ export const ReviewPanelChange = memo<{
                 <span>
                   {t('tracked_change_deleted')}:&nbsp;
                   <del className="review-panel-content-highlight">
-                    {truncateText(change.op.d)}
+                    <ExpandableContent
+                      content={change.op.d}
+                      checkNewLines={false}
+                    />
                   </del>
                 </span>
               </>

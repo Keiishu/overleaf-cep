@@ -225,10 +225,6 @@ module.exports = {
         '127.0.0.1'
       }:3003`,
     },
-    spelling: {
-      url: `http://${process.env.SPELLING_HOST || '127.0.0.1'}:3005`,
-      host: process.env.SPELLING_HOST,
-    },
     docstore: {
       url: `http://${process.env.DOCSTORE_HOST || '127.0.0.1'}:3016`,
       pubUrl: `http://${process.env.DOCSTORE_HOST || '127.0.0.1'}:3016`,
@@ -250,6 +246,12 @@ module.exports = {
       sendProjectStructureOps: true,
       url: `http://${process.env.PROJECT_HISTORY_HOST || '127.0.0.1'}:3054`,
     },
+    historyBackupDeletion: {
+      enabled: false,
+      url: `http://${process.env.HISTORY_BACKUP_DELETION_HOST || '127.0.0.1'}:3101`,
+      user: process.env.HISTORY_BACKUP_DELETION_USER || 'staging',
+      pass: process.env.HISTORY_BACKUP_DELETION_PASS,
+    },
     realTime: {
       url: `http://${process.env.REALTIME_HOST || '127.0.0.1'}:3026`,
     },
@@ -258,6 +260,9 @@ module.exports = {
     },
     notifications: {
       url: `http://${process.env.NOTIFICATIONS_HOST || '127.0.0.1'}:3042`,
+    },
+    references: {
+      url: `http://${process.env.REFERENCES_HOST || '127.0.0.1'}:3056`,
     },
     webpack: {
       url: `http://${process.env.WEBPACK_HOST || '127.0.0.1'}:3808`,
@@ -777,6 +782,8 @@ module.exports = {
   reloadModuleViewsOnEachRequest: process.env.NODE_ENV === 'development',
 
   rateLimit: {
+    subnetRateLimiterDisabled:
+      process.env.SUBNET_RATE_LIMITER_DISABLED === 'true',
     autoCompile: {
       everyone: process.env.RATE_LIMIT_AUTO_COMPILE_EVERYONE || 100,
       standard: process.env.RATE_LIMIT_AUTO_COMPILE_STANDARD || 25,
@@ -961,6 +968,7 @@ module.exports = {
     settingsEntries: [],
     autoCompleteExtensions: [],
     sectionTitleGenerators: [],
+    toastGenerators: [],
   },
 
   moduleImportSequence: [
@@ -1000,7 +1008,7 @@ module.exports = {
 
   splitTestOverrides: {
 //  'history-ranges-support': 'enabled',
-    'math-preview': 'enabled',
+//  'math-preview': 'enabled',
   },
 }
 

@@ -1111,11 +1111,6 @@ async function initialize(webRouter, privateApiRouter, publicApiRouter) {
   )
 
   webRouter.post(
-    '/spelling/check',
-    AuthenticationController.requireLogin(),
-    SpellingController.proxyCheckRequestToSpellingApi
-  )
-  webRouter.post(
     '/spelling/learn',
     validate({
       body: Joi.object({
@@ -1373,14 +1368,8 @@ async function initialize(webRouter, privateApiRouter, publicApiRouter) {
     TokenAccessController.grantTokenAccessReadOnly
   )
 
-  webRouter.use((req, res, next) => {
-    const pathsToRedirect = ['/learn', '/templates', '/blog', '/latex', '/for', '/contact']
-    const shouldRedirect = pathsToRedirect.some(path => req.path.startsWith(path))
-    if (shouldRedirect) {
-      const newUrl = req.protocol + '://' + 'www.overleaf.com' + req.originalUrl
-      return res.redirect(301, newUrl)
-    }
-    next()
+  webRouter.get(['/learn*', '/templates*', '/blog*', '/latex*', '/for/*', '/contact*'], (req, res) => {
+    res.redirect(301, 'https://www.overleaf.com')
   })
 
   webRouter.get('/unsupported-browser', renderUnsupportedBrowserPage)

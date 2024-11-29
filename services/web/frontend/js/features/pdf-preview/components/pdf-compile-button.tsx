@@ -9,6 +9,7 @@ import * as eventTracking from '../../../infrastructure/event-tracking'
 import BootstrapVersionSwitcher from '@/features/ui/components/bootstrap-5/bootstrap-version-switcher'
 import OLTooltip from '@/features/ui/components/ol/ol-tooltip'
 import {
+  DropdownToggleCustom,
   Dropdown,
   DropdownDivider,
   DropdownHeader,
@@ -18,7 +19,8 @@ import {
 } from '@/features/ui/components/bootstrap-5/dropdown-menu'
 import OLButton from '@/features/ui/components/ol/ol-button'
 import OLButtonGroup from '@/features/ui/components/ol/ol-button-group'
-import { bsVersion } from '@/features/utils/bootstrap-5'
+import { bsVersion, isBootstrap5 } from '@/features/utils/bootstrap-5'
+import { useLayoutContext } from '@/shared/context/layout-context'
 
 const modifierKey = /Mac/i.test(navigator.platform) ? 'Cmd' : 'Ctrl'
 
@@ -56,6 +58,8 @@ function PdfCompileButton() {
 
   const { t } = useTranslation()
 
+  const { detachRole } = useLayoutContext()
+
   const fromScratchWithEvent = () => {
     eventTracking.sendMB('recompile-setting-changed', {
       setting: 'from-scratch',
@@ -75,15 +79,18 @@ function PdfCompileButton() {
     {
       'detach-compile-button-animate': animateCompileDropdownArrow,
       'btn-striped-animated': hasChanges,
-      'no-left-border': true,
     },
+    'no-left-border',
     bsVersion({ bs5: 'dropdown-button-toggle' })
   )
 
-  const buttonClassName = classNames({
-    'btn-striped-animated': hasChanges,
-    'no-left-radius': true,
-  })
+  const buttonClassName = classNames(
+    {
+      'btn-striped-animated': hasChanges,
+      'align-items-center py-0': isBootstrap5(),
+    },
+    'no-left-radius px-3'
+  )
 
   return (
     <BootstrapVersionSwitcher
@@ -97,7 +104,10 @@ function PdfCompileButton() {
               description: tooltipElement,
               id: 'compile',
               tooltipProps: { className: 'keyboard-tooltip' },
-              overlayProps: { delayShow: 500 },
+              overlayProps: {
+                delayShow: 500,
+                placement: detachRole === 'detached' ? 'bottom' : undefined,
+              },
             },
             icon: { type: 'refresh', spin: compiling },
             onClick: () => startCompile(),
@@ -201,16 +211,22 @@ function PdfCompileButton() {
         </SplitMenu>
       }
       bs5={
-        <Dropdown as={OLButtonGroup} autoClose="outside">
+        <Dropdown
+          as={OLButtonGroup}
+          autoClose="outside"
+          className="compile-button-group"
+        >
           <OLTooltip
             description={tooltipElement}
             id="compile"
             tooltipProps={{ className: 'keyboard-tooltip' }}
-            overlayProps={{ delay: { show: 500, hide: 0 } }}
+            overlayProps={{
+              delay: { show: 500, hide: 0 },
+              placement: detachRole === 'detached' ? 'bottom' : undefined,
+            }}
           >
             <OLButton
               variant="primary"
-              size="sm"
               disabled={compiling}
               isLoading={compiling}
               onClick={() => startCompile()}
@@ -221,6 +237,7 @@ function PdfCompileButton() {
           </OLTooltip>
 
           <DropdownToggle
+            as={DropdownToggleCustom}
             split
             variant="primary"
             id="pdf-recompile-dropdown"

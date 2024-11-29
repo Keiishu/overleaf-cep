@@ -3,11 +3,11 @@
 const _ = require('lodash')
 const { expect } = require('chai')
 const config = require('config')
-const fs = require('fs')
-const path = require('path')
-const { Readable } = require('stream')
+const fs = require('node:fs')
+const path = require('node:path')
+const { Readable } = require('node:stream')
 const temp = require('temp').track()
-const { promisify } = require('util')
+const { promisify } = require('node:util')
 
 const cleanup = require('./support/cleanup')
 const testFiles = require('./support/test_files')
@@ -84,6 +84,11 @@ describe('BlobStore', function () {
       const blobStore2 = new BlobStore(scenario.projectId2)
 
       beforeEach('initialize the blob stores', async function () {
+        await blobStore.initialize()
+        await blobStore2.initialize()
+      })
+
+      it('can initialize a project again without throwing an error', async function () {
         await blobStore.initialize()
         await blobStore2.initialize()
       })
