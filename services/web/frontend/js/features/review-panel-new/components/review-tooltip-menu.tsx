@@ -18,7 +18,7 @@ import {
   buildAddNewCommentRangeEffect,
   reviewTooltipStateField,
 } from '@/features/source-editor/extensions/review-tooltip'
-import { getTooltip } from '@codemirror/view'
+import { EditorView, getTooltip } from '@codemirror/view'
 import useViewerPermissions from '@/shared/hooks/use-viewer-permissions'
 import usePreviousValue from '@/shared/hooks/use-previous-value'
 import { useLayoutContext } from '@/shared/context/layout-context'
@@ -28,6 +28,10 @@ import {
   useRangesContext,
 } from '../context/ranges-context'
 import { isInsertOperation } from '@/utils/operations'
+import { isCursorNearViewportEdge } from '@/features/source-editor/utils/is-cursor-near-edge'
+import OLTooltip from '@/features/ui/components/ol/ol-tooltip'
+import { useModalsContext } from '@/features/ide-react/context/modals-context'
+import { numberOfChangesInSelection } from '../utils/changes-in-selection'
 
 const ReviewTooltipMenu: FC = () => {
   const state = useCodeMirrorStateContext()
@@ -70,14 +74,21 @@ const ReviewTooltipMenuContent: FC<{
   const { setView } = useReviewPanelViewActionsContext()
   const ranges = useRangesContext()
   const { acceptChanges, rejectChanges } = useRangesActionsContext()
+  const { showGenericConfirmModal } = useModalsContext()
 
   const addComment = useCallback(() => {
     setReviewPanelOpen(true)
     setView('cur_file')
 
-    view.dispatch({
-      effects: buildAddNewCommentRangeEffect(state.selection.main),
-    })
+    const commentPos = state.selection.main.anchor
+    const effects = isCursorNearViewportEdge(view, commentPos)
+      ? [
+          buildAddNewCommentRangeEffect(state.selection.main),
+          EditorView.scrollIntoView(commentPos, { y: 'center' }),
+        ]
+      : [buildAddNewCommentRangeEffect(state.selection.main)]
+
+    view.dispatch({ effects })
     setShow(false)
   }, [setReviewPanelOpen, setView, setShow, view, state.selection.main])
 
@@ -101,12 +112,42 @@ const ReviewTooltipMenuContent: FC<{
   }, [ranges, state.selection.main])
 
   const acceptChangesHandler = useCallback(() => {
-    acceptChanges(...changeIdsInSelection)
-  }, [acceptChanges, changeIdsInSelection])
+    const nChanges = numberOfChangesInSelection(ranges, state.selection.main)
+    showGenericConfirmModal({
+      message: t('confirm_accept_selected_changes', { count: nChanges }),
+      title: t('accept_selected_changes'),
+      onConfirm: () => {
+        acceptChanges(...changeIdsInSelection)
+      },
+      primaryVariant: 'danger',
+    })
+  }, [
+    acceptChanges,
+    changeIdsInSelection,
+    ranges,
+    showGenericConfirmModal,
+    state.selection.main,
+    t,
+  ])
 
   const rejectChangesHandler = useCallback(() => {
-    rejectChanges(...changeIdsInSelection)
-  }, [rejectChanges, changeIdsInSelection])
+    const nChanges = numberOfChangesInSelection(ranges, state.selection.main)
+    showGenericConfirmModal({
+      message: t('confirm_reject_selected_changes', { count: nChanges }),
+      title: t('reject_selected_changes'),
+      onConfirm: () => {
+        rejectChanges(...changeIdsInSelection)
+      },
+      primaryVariant: 'danger',
+    })
+  }, [
+    showGenericConfirmModal,
+    t,
+    ranges,
+    state.selection.main,
+    rejectChanges,
+    changeIdsInSelection,
+  ])
 
   const showChangesButtons = changeIdsInSelection.length > 0
 
@@ -122,18 +163,29 @@ const ReviewTooltipMenuContent: FC<{
       {showChangesButtons && (
         <>
           <div className="review-tooltip-menu-divider" />
-          <button
-            className="review-tooltip-menu-button"
-            onClick={acceptChangesHandler}
+          <OLTooltip
+            id="accept-all-changes"
+            description={t('accept_selected_changes')}
           >
-            <MaterialIcon type="check" />
-          </button>
-          <button
-            className="review-tooltip-menu-button"
-            onClick={rejectChangesHandler}
+            <button
+              className="review-tooltip-menu-button"
+              onClick={acceptChangesHandler}
+            >
+              <MaterialIcon type="check" />
+            </button>
+          </OLTooltip>
+
+          <OLTooltip
+            id="reject-all-changes"
+            description={t('reject_selected_changes')}
           >
-            <MaterialIcon type="clear" />
-          </button>
+            <button
+              className="review-tooltip-menu-button"
+              onClick={rejectChangesHandler}
+            >
+              <MaterialIcon type="clear" />
+            </button>
+          </OLTooltip>
         </>
       )}
     </div>
