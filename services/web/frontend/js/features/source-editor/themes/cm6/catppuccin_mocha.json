@@ -1,0 +1,93 @@
+{
+  "theme": {
+    ".cm-gutters": {
+      "backgroundColor": "#181825",
+      "borderRightColor": "transparent",
+      "color": "#6c7086"
+    },
+    "&": {
+      "backgroundColor": "#1e1e2e",
+      "color": "#cdd6f4"
+    },
+    ".cm-cursor, .cm-dropCursor": {
+      "color": "#f5e0dc"
+    },
+    "&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection, .cm-searchMatch.cm-searchMatch.cm-searchMatch-selected": {
+      "background": "#45475a"
+    },
+    ".cm-activeLine": {
+      "background": "#313244"
+    },
+    ".cm-activeLineGutter": {
+      "backgroundColor": "#313244"
+    },
+    "&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket": {
+      "outline": "1px solid #f9e2af"
+    },
+    ".cm-selectionMatch.cm-selectionMatch, .cm-searchMatch.cm-searchMatch": {
+      "backgroundColor": "#45475a",
+      "borderRadius": "3px"
+    }
+  },
+  "highlightStyle": {
+    ".tok-keyword": {
+      "color": "#cba6f7"
+    },
+    ".tok-literal": {
+      "color": "#fab387"
+    },
+    ".tok-typeName": {
+      "color": "#f9e2af"
+    },
+    ".tok-invalid": {
+      "color": "#11111b",
+      "backgroundColor": "#f38ba8"
+    },
+    ".tok-string": {
+      "color": "#a6e3a1"
+    },
+    ".tok-comment": {
+      "color": "#6c7086",
+      "fontStyle": "italic"
+    },
+    ".tok-attributeValue": {
+      "color": "#fab387"
+    },
+    ".tok-attributeName": {
+      "color": "#89b4fa"
+    },
+    ".tok-function": {
+      "color": "#89b4fa"
+    },
+    ".tok-tagName": {
+      "color": "#f38ba8"
+    },
+    ".tok-number": {
+      "color": "#fab387"
+    },
+    ".tok-operator": {
+      "color": "#89dceb"
+    },
+    ".tok-punctuation": {
+      "color": "#bac2de"
+    },
+    ".tok-paren": {
+      "color": "#bac2de"
+    },
+    ".tok-heading": {
+      "color": "#89b4fa",
+      "fontWeight": "bold"
+    },
+    ".tok-list": {
+      "color": "#f9e2af"
+    },
+    ".tok-regexp": {
+      "color": "#f5c2e7"
+    },
+    ".tok-variableName": {
+      "color": "#cdd6f4"
+    }
+  },
+  "dark": true
+}
+

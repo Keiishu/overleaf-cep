@@ -1369,6 +1369,10 @@ const THEME_LIST = [
   { name: 'overleaf', dark: false },
   { name: 'overleaf_dark', dark: true },
   { name: 'textmate', dark: false },
+  { name: 'catppuccin_latte', dark: false },
+  { name: 'catppuccin_frappe', dark: true },
+  { name: 'catppuccin_macchiato', dark: true },
+  { name: 'catppuccin_mocha', dark: true },
 ]
 
 const LEGACY_THEME_LIST = [
